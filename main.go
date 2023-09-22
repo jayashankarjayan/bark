@@ -3,14 +3,15 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/fasthttp/router"
 	"github.com/joho/godotenv"
 	"github.com/valyala/fasthttp"
 
-	`github.com/techrail/bark/controllers`
-	`github.com/techrail/bark/resources`
-	`github.com/techrail/bark/services/dbLogWriter`
+	"github.com/techrail/bark/controllers"
+	"github.com/techrail/bark/resources"
+	"github.com/techrail/bark/services/dbLogWriter"
 )
 
 func Index(ctx *fasthttp.RequestCtx) {
@@ -43,5 +44,6 @@ func main() {
 		log.Fatal("E#1KDZRP - " + err.Error())
 	}
 	go dbLogWriter.StartWritingLogs()
-	log.Fatal(fasthttp.ListenAndServe(":8080", r.Handler))
+	log.Printf("Running on port: %v", os.Getenv("APPPORT"))
+	log.Fatal(fasthttp.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("APPPORT")), r.Handler))
 }
